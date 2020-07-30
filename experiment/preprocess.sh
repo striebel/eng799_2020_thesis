@@ -17,13 +17,13 @@ TRG=de
 bpe_operations=89500
 
 # path to moses decoder: https://github.com/moses-smt/mosesdecoder
-mosesdecoder=/home/js/eng799.sl/10.software/mosesdecoder
+mosesdecoder=../mosesdecoder
 
 # path to subword segmentation scripts: https://github.com/rsennrich/subword-nmt
-subword_nmt=/home/js/eng799.sl/10.software/subword-nmt/subword_nmt
+subword_nmt=../subword-nmt/subword_nmt
 
 # path to nematus ( https://www.github.com/rsennrich/nematus )
-nematus=/home/js/eng799.sl/10.software/nematus
+nematus=../nematus
 
 # tokenize
 for prefix in corpus newstest2013
