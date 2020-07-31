@@ -13,7 +13,7 @@ from collections import namedtuple
 
 Word = namedtuple(
     'Word',
-    ['pos', 'word', 'lemma', 'tag', 'morph', 'head', 'func', 'proj_head', 'proj_func'])
+    ['pos', 'word', 'lemma', 'tag', 'tag2', 'morph', 'head', 'func', 'proj_head', 'proj_func'])
 
 
 def escape_special_chars(line):
@@ -72,7 +72,7 @@ def read_sentences(fobj):
 
         sentence.append(
             Word(
-                int(pos), word, lemma, tag2, morph, int(head), func, int(proj_head),
+                int(pos), word, lemma, tag, tag2, morph, int(head), func, int(proj_head),
                 proj_func))
 
 
@@ -80,7 +80,7 @@ def get_factors(sentence, idx):
 
     word = sentence[idx]
 
-    factors = [word.lemma, word.tag, word.func]
+    factors = [word.lemma, word.tag, word.tag2]
 
     return factors
 
