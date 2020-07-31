@@ -1,0 +1,8 @@
+http://data.statmt.org/rsennrich/wmt16_factors/de-en/corpus.parallel.conll.de.gz
+http://data.statmt.org/rsennrich/wmt16_factors/en-de/corpus.parallel.conll.en.gz
+http://data.statmt.org/rsennrich/wmt16_factors/de-en/newstest2013.conll.de.gz
+http://data.statmt.org/rsennrich/wmt16_factors/en-de/newstest2013.conll.en.gz
+http://data.statmt.org/rsennrich/wmt16_factors/de-en/newstest2015.conll.de.gz
+http://data.statmt.org/rsennrich/wmt16_factors/en-de/newstest2015.conll.en.gz
+http://data.statmt.org/rsennrich/wmt16_factors/de-en/newstest2016.conll.de.gz
+http://data.statmt.org/rsennrich/wmt16_factors/en-de/newstest2016.conll.en.gz
