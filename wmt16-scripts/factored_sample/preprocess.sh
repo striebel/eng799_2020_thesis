@@ -7,10 +7,10 @@
 # and the file names (currently, data/corpus and data/newstest2013 are being processed)
 
 # suffix of source language files
-SRC=en
+SRC=de
 
 # suffix of target language files
-TRG=de
+TRG=en
 
 # number of merge operations. Network vocabulary should be slightly larger (to include characters),
 # or smaller if the operations are learned on the joint vocabulary
@@ -26,42 +26,74 @@ subword_nmt=../../subword-nmt/subword_nmt
 nematus=../../nematus
 
 # tokenize
-for prefix in corpus newstest2013
+#
+# This loop originally took the 4 base-corpus files as input and produced 4 tokenized output files:
+#   corpus.conll.en       --> corpus.tok.en
+#   corpus.de             --> corpus.tok.de
+#   newstest2013.conll.en --> newstest2013.tok.en
+#   newstest2013.de       --> newstest2013.tok.de
+#
+#
+#for prefix in corpus newstest2013
+# do
+#   cut -f 2 data/$prefix.conll.$SRC | \
+#   awk -v RS="" '{$1=$1}7' | \
+#   $mosesdecoder/scripts/tokenizer/escape-special-chars.perl -l $SRC > data/$prefix.tok.$SRC
+#
+#   cat data/$prefix.$TRG | \
+#   $mosesdecoder/scripts/tokenizer/normalize-punctuation.perl -l $TRG | \
+#   $mosesdecoder/scripts/tokenizer/tokenizer.perl -a -l $TRG > data/$prefix.tok.$TRG
+#
+# done
+#
+#
+# The loop is modified to do the following processing instead:
+#   corpus.conll.de            --> corpus.tok.de
+#   corpus.conll.en            --> corpus.tok.en
+#   newstest2013.conll.de      --> newstest2013.tok.de
+#   newstest2013.conll.en      --> newstest2013.tok.en
+#   newstest2015.conll.de      --> newstest2015.tok.de
+#   newstest2015.conll.en      --> newstest2015.tok.en
+#   newstest2016.conll.de      --> newstest2016.tok.de
+#   newstest2016.conll.en      --> newstest2016.tok.en
+for prefix in corpus newstest2013 newstest2015 newstest2016
  do
    cut -f 2 data/$prefix.conll.$SRC | \
    awk -v RS="" '{$1=$1}7' | \
    $mosesdecoder/scripts/tokenizer/escape-special-chars.perl -l $SRC > data/$prefix.tok.$SRC
 
-   cat data/$prefix.$TRG | \
-   $mosesdecoder/scripts/tokenizer/normalize-punctuation.perl -l $TRG | \
-   $mosesdecoder/scripts/tokenizer/tokenizer.perl -a -l $TRG > data/$prefix.tok.$TRG
-
+   cut -f 2 data/$prefix.conll.$TRG | \
+   awk -v RS="" '{$1=$1}7' | \
+   $mosesdecoder/scripts/tokenizer/escape-special-chars.perl -l $TRG > data/$prefix.tok.$TRG
  done
 
+
+
 # train truecaser
+#
+# The parallel training corpus is used to train a truecase model for each language:
+#   corpus.tok.de --> truecase-model.de
+#   corpus.tok.en --> truecase-model.en
+#
 $mosesdecoder/scripts/recaser/train-truecaser.perl -corpus data/corpus.tok.$SRC -model model/truecase-model.$SRC
 $mosesdecoder/scripts/recaser/train-truecaser.perl -corpus data/corpus.tok.$TRG -model model/truecase-model.$TRG
 
+
+
 # apply truecaser (cleaned training corpus)
-for prefix in corpus
+for prefix in corpus newstest2013 newstest2015 newstest2016
  do
   $mosesdecoder/scripts/recaser/truecase.perl -model model/truecase-model.$SRC < data/$prefix.tok.$SRC > data/$prefix.tc.$SRC
   $mosesdecoder/scripts/recaser/truecase.perl -model model/truecase-model.$TRG < data/$prefix.tok.$TRG > data/$prefix.tc.$TRG
  done
 
-# apply truecaser (dev/test files)
-for prefix in newstest2013
- do
-  $mosesdecoder/scripts/recaser/truecase.perl -model model/truecase-model.$SRC < data/$prefix.tok.$SRC > data/$prefix.tc.$SRC
-  $mosesdecoder/scripts/recaser/truecase.perl -model model/truecase-model.$TRG < data/$prefix.tok.$TRG > data/$prefix.tc.$TRG
- done
 
 # train BPE
 cat data/corpus.tc.$SRC data/corpus.tc.$TRG | $subword_nmt/learn_bpe.py -s $bpe_operations > model/$SRC$TRG.bpe
 
 # apply BPE
 
-for prefix in corpus newstest2013
+for prefix in corpus newstest2013 newstest2015 newstest2016
  do
   $subword_nmt/apply_bpe.py -c model/$SRC$TRG.bpe < data/$prefix.tc.$SRC > data/$prefix.bpe.$SRC
   $subword_nmt/apply_bpe.py -c model/$SRC$TRG.bpe < data/$prefix.tc.$TRG > data/$prefix.bpe.$TRG
@@ -69,7 +101,7 @@ for prefix in corpus newstest2013
 
 # build factored input
 
-for prefix in corpus newstest2013
+for prefix in corpus newstest2013 newstest2015 newstest2016
  do
   ../preprocess/conll_to_factors.py data/$prefix.bpe.$SRC data/$prefix.conll.$SRC > data/$prefix.factors.$SRC
  done
@@ -78,8 +110,15 @@ for prefix in corpus newstest2013
 $nematus/data/build_dictionary.py data/corpus.bpe.$SRC data/corpus.bpe.$TRG
 
 # build dictionary for additional factors
+#
 for i in {1..4}
  do
   $mosesdecoder/scripts/training/reduce-factors.perl --corpus data/corpus.factors.$SRC --reduced-corpus data/corpus.factors.$i.$SRC --factor $i
   $nematus/data/build_dictionary.py data/corpus.factors.$i.$SRC
  done
+
+# TODO: Compile a C program for splitting a $prefix.factors.$SRC file into the 3 types of corpora that will be used to train the 3 models;
+#       run the program 4 times, once for each of the corpora.
+
+
+
