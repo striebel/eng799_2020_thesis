@@ -25,6 +25,17 @@ subword_nmt=../../subword-nmt/subword_nmt
 # path to nematus ( https://www.github.com/rsennrich/nematus )
 nematus=../../nematus
 
+
+
+# Compile the program for splitting the master corpus, which is needed later
+gcc -Wall -O3 -o split_master_corpus split_master_corpus.c
+retcode=$?
+if [ $retcode -ne 0 ]; then
+  echo "split_master_corpus.c failed to compile"
+  exit $retcode
+fi
+
+
 # tokenize
 #
 # This loop originally took the 4 base-corpus files as input and produced 4 tokenized output files:
@@ -117,8 +128,33 @@ for i in {1..4}
   $nematus/data/build_dictionary.py data/corpus.factors.$i.$SRC
  done
 
-# TODO: Compile a C program for splitting a $prefix.factors.$SRC file into the 3 types of corpora that will be used to train the 3 models;
-#       run the program 4 times, once for each of the corpora.
 
+# Split the $prefix.factors.$SRC files into the 3 types of corpora that will be used to train the 3 models;
 
+./split_master_corpus corpus
+retcode=$?
+if [ $retcode -ne 0 ]; then
+  echo "split_master_corpus failed: exiting script"
+  exit $retcode
+fi
 
+./split_master_corpus newstest2013
+retcode=$?
+if [ $retcode -ne 0 ]; then
+  echo "split_master_corpus failed: exiting script"
+  exit $retcode
+fi
+
+./split_master_corpus newstest2015
+retcode=$?
+if [ $retcode -ne 0 ]; then
+  echo "split_master_corpus failed: exiting script"
+  exit $retcode
+fi
+
+./split_master_corpus newstest2016
+retcode=$?
+if [ $retcode -ne 0 ]; then
+  echo "split_master_corpus failed: exiting script"
+  exit $retcode
+fi
