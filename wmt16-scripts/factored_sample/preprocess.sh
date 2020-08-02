@@ -27,6 +27,12 @@ nematus=../../nematus
 
 
 
+mkdir model
+mkdir model/ctrl
+mkdir model/udts
+mkdir model/stts
+
+
 # Compile the program for splitting the master corpus, which is needed later
 gcc -Wall -O3 -o split_master_corpus split_master_corpus.c
 retcode=$?

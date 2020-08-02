@@ -1,19 +1,20 @@
 #!/bin/sh
 
 # path to nematus ( https://www.github.com/rsennrich/nematus )
-nematus=/path/to/nematus
+nematus=../../nematus
 
 # path to moses decoder: https://github.com/moses-smt/mosesdecoder
-mosesdecoder=/path/to/mosesdecoder
+mosesdecoder=../../mosesdecoder
 
 # theano device, in case you do not want to compute on gpu, change it to cpu
-device=gpu
+device=cuda
 
 #model prefix
-prefix=model/model.npz
+#prefix=model/model.npz
+prefix="model/${1}/model_${1}.npz"
 
-dev=data/newstest2013.factors.en
-ref=data/newstest2013.tok.de
+dev="data/newstest2013.factors_${1}.de"
+ref=data/newstest2013.tok.en
 
 # decode
 THEANO_FLAGS=mode=FAST_RUN,floatX=float32,device=$device,on_unused_input=warn python $nematus/nematus/translate.py \
