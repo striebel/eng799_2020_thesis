@@ -13,7 +13,7 @@ CUDA_VISIBLE_DEVICES=$device python $nematus/nematus/train.py `# validerr = trai
   --factors 3                                                 `# factors=3,                               ` \
   --dim_per_factor 370 5 125                                  `# dim_per_factor=[370,5,125],              ` \
   --state_size 1024                                           `# dim=1024,                                ` \
-  --target_vocab_size 90000                                   `# n_words=90000,                           ` \
+  --target_vocab_size 78500                                   `# n_words=90000,                           ` \
   --source_vocab_sizes 85000 6 1500000                        `# n_words_src=90000,                       ` \
   --decay_c 0.0                                               `# decay_c=0.,                              ` \
   --clip_c 1.0                                                `# clip_c=1.,                               ` \
