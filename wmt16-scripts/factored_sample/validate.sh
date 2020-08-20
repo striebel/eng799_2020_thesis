@@ -1,43 +1,12 @@
 #!/bin/sh
 
-# path to nematus ( https://www.github.com/rsennrich/nematus )
-nematus=../../nematus
+translations=$1
+this_dir=`dirname $0`
+ref=$this_dir/data/newstest2013.tok.en
+moses=$this_dir/../../mosesdecoder
 
-# path to moses decoder: https://github.com/moses-smt/mosesdecoder
-mosesdecoder=../../mosesdecoder
-
-# theano device, in case you do not want to compute on gpu, change it to cpu
-device=cuda
-
-#model prefix
-#prefix=model/model.npz
-prefix="model/${1}/model_${1}.npz"
-
-dev="data/newstest2013.factors_${1}.de"
-ref=data/newstest2013.tok.en
-
-# decode
-THEANO_FLAGS=mode=FAST_RUN,floatX=float32,device=$device,on_unused_input=warn python $nematus/nematus/translate.py \
-     -m $prefix.dev.npz \
-     -i $dev \
-     -o $dev.output.dev \
-     -k 12 -n -p 1
-
-
-./postprocess-dev.sh < $dev.output.dev > $dev.output.postprocessed.dev
-
-
-## get BLEU
-BEST=`cat ${prefix}_best_bleu || echo 0`
-$mosesdecoder/scripts/generic/multi-bleu.perl $ref < $dev.output.postprocessed.dev >> ${prefix}_bleu_scores
-BLEU=`$mosesdecoder/scripts/generic/multi-bleu.perl $ref < $dev.output.postprocessed.dev | cut -f 3 -d ' ' | cut -f 1 -d ','`
-BETTER=`echo "$BLEU > $BEST" | bc`
-
-echo "BLEU = $BLEU"
-
-# save model with highest BLEU
-if [ "$BETTER" = "1" ]; then
-  echo "new best; saving"
-  echo $BLEU > ${prefix}_best_bleu
-  cp ${prefix}.dev.npz ${prefix}.npz.best_bleu
-fi
+# evaluate translations and write BLEU score to standard output
+$this_dir/postprocess-dev.sh < $translations | \
+    $moses/scripts/generic/multi-bleu.perl $ref | \
+    cut -f 3 -d ' ' | \
+    cut -f 1 -d ','
