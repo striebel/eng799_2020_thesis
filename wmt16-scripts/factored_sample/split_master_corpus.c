@@ -67,13 +67,13 @@ int main(int argc, char **argv) {
         }
       }
 
-      if (0 <= state && state <= 2) {
+      if (0 <= state && state <= 1) {
         buf0[out0_i++] = buf[in_i];
       }
-      if (0 <= state && state <= 3) {
+      if ((0 <= state && state <= 1) || state == 3) {
         buf1[out1_i++] = buf[in_i];
       }
-      if ((0 <= state && state <= 2) || state == 4) {
+      if ((0 <= state && state <= 1) || state == 4) {
         buf2[out2_i++] = buf[in_i];
       }
     }
