@@ -6,7 +6,7 @@
 device=0
 this_dir=`dirname $0`
 nematus=$this_dir/../../nematus
-model="${this_dir}/model/${1}/model_${1}.npz.best_valid_script"
+model="${this_dir}/model/${1}/model_${1}.npz.best-valid-script"
 test="${this_dir}/data/newstest${2}.factors_${1}.de"
 candidate_bpe="${this_dir}/eval/${1}/newstest${2}.bpe.en.candidate"
 candidate_mrg="${this_dir}/eval/${1}/newstest${2}.en.candidate"
