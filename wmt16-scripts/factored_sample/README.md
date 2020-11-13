@@ -1,1 +1,1 @@
-This dir contains the scripts required to reproduce my thesis's results; see Chapter 3 of the thesis for how to use the scripts. Note that some files here are originally mine, but most are modifications of existing files taken from `https://github.com/rsennrich/wmt16-scripts`.
+This directory contains the scripts required to reproduce my thesis's results; see Chapter 3 of the thesis for how to use the scripts. Note that some files here are originally mine, but most are modifications of files obtained from `https://github.com/rsennrich/wmt16-scripts`.
