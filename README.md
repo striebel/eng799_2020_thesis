@@ -7,7 +7,7 @@ A pdf of the thesis can be downloaded from [here](https://scholarly.cmich.edu/?a
 
 Most of this repository's content consists of project dependencies, which are collected here in their needed versions for convenience. `mosesdecoder` is taken from `https://github.com/moses-smt/mosesdecoder`. `nematus` is taken from `https://github.com/EdinburghNLP/nematus`. `subword-nmt` is taken from `https://github.com/rsennrich/subword-nmt`. And `wmt16-scripts` is originally from `https://github.com/rsennrich/wmt16-scripts`.
 
-The scripts of most interest to the project are the ones in the `wmt16-scripts/factored_sample` directory.
+The scripts of most interest to the project are in the `wmt16-scripts/factored_sample` directory.
 
 
 *Should that link ever go stale, one could try going to [scholarly.cmich.edu](https://scholarly.cmich.edu) and search using my name and/or the thesis title.
