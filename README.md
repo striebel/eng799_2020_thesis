@@ -3,7 +3,7 @@ This repository contains files associated with my master's thesis
 
 > Part-of-Speech Tags as Input Features in German-to-English Neural Machine Translation: A Comparison of Tagsets.
 
-A pdf of the thesis can be downloaded from [here](https://scholarly.cmich.edu/?a=d&d=CMUGR2020-111.1.1).* The project and its findings are summarized in the abstract on p. iii. Chapter 3 describes how to reproduce these findings, including how to set up an environment, obtain the datasets, and then do model training and evaluation. 
+A pdf of the thesis can be downloaded from [here](https://scholarly.cmich.edu/?a=d&d=CMUGR2020-111.1.1).* The project and its findings are summarized in the abstract on p. iii. Chapter 3 describes how to reproduce those findings, including how to set up an environment, obtain the datasets, and then do model training and evaluation. 
 
 Most of this repository's content consists of project dependencies, which are collected here in their needed versions for convenience. `mosesdecoder` is taken from `https://github.com/moses-smt/mosesdecoder`. `nematus` is taken from `https://github.com/EdinburghNLP/nematus`. `subword-nmt` is taken from `https://github.com/rsennrich/subword-nmt`. And `wmt16-scripts` is originally from `https://github.com/rsennrich/wmt16-scripts`.
 
